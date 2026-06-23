@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X3M0RZ9HGF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X3M0RZ9HGF');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Pro | AVM Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:#FAF9F6; color:#1A1A1A; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+        .card { background:white; border:1px solid #E5E1DA; padding:64px 56px; max-width:480px; width:100%; text-align:center; }
+        .om-symbol { font-family:'Cormorant Garamond',serif; font-size:72px; color:#C9A96E; margin-bottom:24px; display:block; animation:glow 2s ease-in-out infinite; }
+        @keyframes glow { 0%,100%{filter:drop-shadow(0 0 8px rgba(201,169,110,0.4))} 50%{filter:drop-shadow(0 0 24px rgba(201,169,110,0.8))} }
+        .eyebrow { font-size:9px; font-weight:700; letter-spacing:0.35em; text-transform:uppercase; color:#C9A96E; margin-bottom:14px; display:block; }
+        h1 { font-family:'Cormorant Garamond',serif; font-size:44px; font-weight:300; font-style:italic; line-height:1.1; margin-bottom:16px; }
+        .sub { font-size:14px; color:#888; line-height:1.7; margin-bottom:36px; }
+        .status-box { background:#FAF9F6; border:1px solid #E5E1DA; padding:16px 20px; margin-bottom:32px; text-align:left; }
+        .status-label { font-size:9px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#888; margin-bottom:6px; }
+        .status-value { font-size:14px; font-weight:600; }
+        #status-msg { font-size:12px; color:#888; margin-top:4px; }
+        .btn-go { display:block; width:100%; background:#1A1A1A; color:white; padding:16px; text-decoration:none; font-size:10px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; text-align:center; transition:all 0.2s; border:1px solid #1A1A1A; }
+        .btn-go:hover { background:transparent; color:#1A1A1A; }
+        .spinner { display:inline-block; width:14px; height:14px; border:2px solid #E5E1DA; border-top-color:#1A1A1A; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:8px; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .features-unlocked { display:flex; flex-direction:column; gap:8px; margin-bottom:28px; text-align:left; }
+        .feat-item { display:flex; align-items:center; gap:10px; font-size:12px; }
+        .feat-check { width:18px; height:18px; background:#C9A96E; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; flex-shrink:0; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <span class="om-symbol">ॐ</span>
+    <span class="eyebrow">Payment Successful</span>
+    <h1>Welcome to<br>AVM Pro</h1>
+    <p class="sub">Your account is being upgraded. This takes just a moment.</p>
+    <div class="status-box">
+        <div class="status-label">Upgrade Status</div>
+        <div class="status-value" id="status-value"><span class="spinner"></span> Activating Pro access...</div>
+        <div id="status-msg"></div>
+    </div>
+    <div class="features-unlocked" id="features-box" style="display:none">
+        <div class="feat-item"><div class="feat-check">✦</div><span>OM Resonance Sessions unlocked</span></div>
+        <div class="feat-item"><div class="feat-check">✦</div><span>Extended Timer (30, 45 min) unlocked</span></div>
+        <div class="feat-item"><div class="feat-check">✦</div><span>Live Session Access unlocked</span></div>
+        <div class="feat-item"><div class="feat-check">✦</div><span>Priority Support unlocked</span></div>
+    </div>
+    <a href="dashboard-pro.html" class="btn-go" id="go-btn" style="display:none">Enter Pro Dashboard →</a>
+</div>
+<script>
+    const API = '/api';
+    async function activatePro() {
+        const token = localStorage.getItem('avm_token');
+        const user  = JSON.parse(localStorage.getItem('avm_user') || 'null');
+        if (!token || !user) {
+            document.getElementById('status-value').textContent = 'Please log in first';
+            setTimeout(() => window.location.href = 'index.html', 2000);
+            return;
+        }
+        try {
+            const res  = await fetch(API + '/auth/upgrade', { method:'PATCH', headers:{'Authorization':'Bearer '+token} });
+            const data = await res.json();
+            if (res.ok && data.token) {
+                localStorage.setItem('avm_token', data.token);
+                localStorage.setItem('avm_user', JSON.stringify(data.user));
+                localStorage.removeItem('avm_upgrade_pending');
+                document.getElementById('status-value').innerHTML = '✓ Pro access activated!';
+                document.getElementById('status-value').style.color = '#2d6a4f';
+                document.getElementById('status-msg').textContent = 'Welcome, ' + data.user.name + '!';
+                document.getElementById('features-box').style.display = 'flex';
+                document.getElementById('go-btn').style.display = 'block';
+                setTimeout(() => window.location.href = 'dashboard-pro.html', 3000);
+            } else {
+                document.getElementById('status-value').textContent = 'Already Pro!';
+                document.getElementById('go-btn').style.display = 'block';
+            }
+        } catch(e) {
+            document.getElementById('status-value').textContent = 'Payment received!';
+            document.getElementById('status-msg').textContent = 'Your Pro access will activate shortly.';
+            document.getElementById('go-btn').style.display = 'block';
+        }
+    }
+    activatePro();
+</script>
+</body>
+</html>

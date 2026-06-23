@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X3M0RZ9HGF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X3M0RZ9HGF');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVM Academy | Member Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --bg-primary: #FAF9F6; --text-bold: #1A1A1A; --border: #E5E1DA; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); color: var(--text-bold); height: 100vh; overflow: hidden; }
+        h1, h2, h3, h4, .serif { font-family: 'Cormorant Garamond', serif; }
+        .sidebar { border-right: 1px solid var(--border); }
+        .content-area { overflow-y: auto; height: calc(100vh - 80px); scroll-behavior: smooth; }
+        .glass-card { background: white; border: 1px solid var(--border); transition: all 0.3s ease; }
+        .glass-card:hover { border-color: #000; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .btn-upgrade { background-color: var(--text-bold); color: white; padding: 0.8rem 2rem; letter-spacing: 0.15em; text-transform: uppercase; font-size: 0.7rem; font-weight: 700; transition: 0.2s; border: 1px solid var(--text-bold); }
+        .btn-upgrade:hover { background-color: transparent; color: var(--text-bold); }
+        .nav-link { cursor: pointer; transition: all 0.2s; border-right: 3px solid transparent; }
+        .nav-link.active { color: black; border-right: 3px solid black; background: #f3f3f3; }
+        
+        /* Fixed Hidden Section CSS */
+        .hidden-section { display: none !important; }
+        
+        /* Calendar Styling */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background-color: var(--border); border: 1px solid var(--border); }
+        .calendar-day { background: white; aspect-ratio: 1.2/1; display: flex; flex-direction: column; align-items: flex-end; padding: 10px; font-size: 0.8rem; cursor: pointer; }
+        .calendar-day.other-month { background: #fdfdfd; color: #ccc; pointer-events: none; }
+        .calendar-day:hover:not(.other-month) { background: #f0f0f0; }
+        .calendar-day.available { background: #000; color: #fff; }
+        .calendar-day.available::before { content: 'AVAILABLE'; font-size: 0.5rem; letter-spacing: 1px; margin-top: auto; align-self: center; }
+        .weekday { background: #fff; font-weight: bold; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; padding: 15px 0; text-align: center; border-bottom: 1px solid var(--border); }
+        
+        /* Input Styling for Worksheets */
+        .worksheet-input { width: 100%; border: none; border-bottom: 1px dashed #ccc; background: transparent; padding: 0.5rem 0; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-bottom: 1rem; outline: none; transition: 0.2s; }
+        .worksheet-input:focus { border-bottom-color: #000; }
+    </style>
+
+    <style>
+        .pro-lock { position:relative; pointer-events:none; }
+        .pro-lock::after {
+            content: '✦ Pro Feature';
+            position:absolute; inset:0; background:rgba(250,249,246,0.92);
+            display:flex; align-items:center; justify-content:center;
+            font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase;
+            color:#92400e; pointer-events:auto; cursor:pointer;
+            border: 1px dashed #d97706;
+        }
+        .pro-lock::after { display:flex; }
+        .pro-banner {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            color:white; padding:12px 20px; text-align:center;
+            font-size:10px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase;
+        }
+        .pro-banner a { color:#f59e0b; text-decoration:underline; cursor:pointer; }
+        .user-greeting { font-size:11px; color:#666; font-weight:600; letter-spacing:0.1em; }
+    </style>
+</head>
+<body class="flex flex-col">
+    <div class="pro-banner">
+        You are on the <strong>Free Plan</strong>. OM Resonance &amp; extended timers are <a onclick="window.location.href='upgrade.html'">Pro only ✦</a> — <a onclick="window.location.href='upgrade.html'">Upgrade now</a>
+    </div>
+    <div class="flex flex-grow overflow-hidden">
+
+    <aside class="sidebar w-20 lg:w-64 h-full bg-white flex flex-col p-6 z-20">
+        <div class="mb-12">
+            <div class="flex items-center gap-2">
+                <img src="data:image/png;base64,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" alt="AVM" style="height:40px;width:40px;object-fit:contain;flex-shrink:0">
+                <span class="text-base font-bold tracking-[0.2em] uppercase serif hidden lg:block leading-tight">AVM<br>Academy</span>
+            </div>
+        </div>
+        
+        <nav class="flex-grow space-y-2 w-full">
+            <div onclick="showSection('dashboard')" id="link-dashboard" class="nav-link active flex items-center gap-4 p-3 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-black">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> <span class="hidden lg:block">Command Hub</span>
+            </div>
+            <div onclick="showSection('calendar')" id="link-calendar" class="nav-link flex items-center gap-4 p-3 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-black">
+                <i data-lucide="calendar-days" class="w-5 h-5"></i> <span class="hidden lg:block">My Schedule</span>
+            </div>
+            <div onclick="showSection('kit')" id="link-kit" class="nav-link flex items-center gap-4 p-3 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-black">
+                <i data-lucide="package" class="w-5 h-5"></i> <span class="hidden lg:block">Wellness Kit</span>
+            </div>
+            <div onclick="showSection('chunks')" id="link-chunks" class="nav-link flex items-center gap-4 p-3 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-black">
+                <i data-lucide="layers" class="w-5 h-5"></i> <span class="hidden lg:block">Meditation Chunks</span>
+            </div>
+            <div onclick="showSection('sessions')" id="link-sessions" class="nav-link flex items-center gap-4 p-3 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-black">
+                <i data-lucide="play-circle" class="w-5 h-5"></i> <span class="hidden lg:block">Sessions</span>
+            </div>
+            <div onclick="showSection('timer')" id="link-timer" class="nav-link flex items-center gap-4 p-3 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-black">
+                <i data-lucide="clock" class="w-5 h-5"></i> <span class="hidden lg:block">Meditation Timer</span>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="flex-grow flex flex-col">
+        <header class="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-10">
+            <div><h2 id="page-title" class="text-xs font-bold tracking-[0.4em] uppercase text-gray-400 italic">Command Hub</h2><p class="user-greeting" id="user-greeting"></p></div>
+            <div class="flex items-center gap-4">
+                <div class="w-8 h-8 bg-gray-200 rounded-full"></div>
+                <button class="btn-upgrade hidden md:block" onclick="window.location.href='upgrade.html'">Go Pro ✦</button>
+            </div>
+        </header>
+
+        <main class="content-area p-10 bg-[#FAF9F6] relative">
+            
+            <section id="dashboard" class="space-y-8">
+                <div class="border-b border-black pb-6 mb-8">
+                    <h3 class="text-5xl italic serif">Where would you like to focus today?</h3>
+                    <p class="text-xs font-bold tracking-widest uppercase text-gray-400 mt-4">Select a module to continue your journey</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div onclick="showSection('kit')" class="glass-card p-8 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 group">
+                        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition">
+                            <i data-lucide="package" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-2xl serif italic mb-2">Wellness Kit</h4>
+                        <p class="text-sm text-gray-500">Explore the 5 Pillars of Resilience and holistic breathing techniques.</p>
+                    </div>
+
+                    <div onclick="showSection('timer')" class="glass-card p-8 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 group">
+                        <div class="w-16 h-16 rounded-full bg-blue-50 text-blue-900 flex items-center justify-center mb-6 group-hover:bg-blue-900 group-hover:text-white transition">
+                            <i data-lucide="clock" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-2xl serif italic mb-2">Meditation Timer</h4>
+                        <p class="text-sm text-gray-500">Start a timed, calming session to center your mind and body.</p>
+                    </div>
+
+                    <div onclick="showSection('chunks')" class="glass-card p-8 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 group">
+                        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition">
+                            <i data-lucide="layers" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-2xl serif italic mb-2">Meditation Chunks</h4>
+                        <p class="text-sm text-gray-500">Access quick 5-10 minute reference guides for specific ailments.</p>
+                    </div>
+
+                    <div onclick="showSection('calendar')" class="glass-card p-8 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 group">
+                        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition">
+                            <i data-lucide="calendar-days" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-2xl serif italic mb-2">My Schedule</h4>
+                        <p class="text-sm text-gray-500">Submit your availability for upcoming academic and spiritual sessions.</p>
+                    </div>
+
+                    <div onclick="showSection('sessions')" class="glass-card p-8 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 group">
+                        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition">
+                            <i data-lucide="play-circle" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-2xl serif italic mb-2">Sessions</h4>
+                        <p class="text-sm text-gray-500">Pre-recorded protocols and live sessions. 3 free sessions available.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="calendar" class="hidden-section space-y-8">
+                <div class="flex justify-between items-center border-b border-black pb-4">
+                    <div>
+                        <h3 class="text-4xl italic" id="calendar-month-year">March 2026</h3>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-2">1. Select your available dates below</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <button onclick="changeMonth(-1)" class="p-3 border border-black hover:bg-black hover:text-white transition rounded"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+                        <button onclick="changeMonth(1)" class="p-3 border border-black hover:bg-black hover:text-white transition rounded"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+                
+                <div class="calendar-grid" id="calendar-body">
+                    </div>
+
+                <div class="bg-white p-6 border border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
+                    <div>
+                        <h4 class="font-bold text-sm">Ready to confirm your schedule?</h4>
+                        <p class="text-xs text-gray-500">Your selections will be submitted to the Academy for planning.</p>
+                    </div>
+                    <button onclick="submitAvailability()" class="btn-upgrade whitespace-nowrap">Submit Availability</button>
+                </div>
+            </section>
+
+            <section id="kit" class="hidden-section space-y-12">
+                <div class="border-b border-black pb-4">
+                    <h3 class="text-4xl italic">Holistic Wellness & Resilience</h3>
+                    <p class="text-xs font-bold tracking-widest uppercase text-gray-400 mt-2">Body , Mind , Conscious</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="glass-card p-10 bg-black text-white">
+                        <h4 class="text-2xl mb-6 italic serif">The Vibration of 'OM'</h4>
+                        <p class="text-sm leading-relaxed font-light opacity-90">
+                            The vibration of 'OM' can heal any disease. Feel the vibration throughout your body. Take the vibration to the point where you feel the pain. Keep that vibration at that point and remove the negativity in the form of a black bubble; throw it out of the body, let it go out to the atmosphere.
+                        </p>
+                    </div>
+                    <div class="glass-card p-10 bg-white">
+                        <h4 class="text-xs font-bold tracking-widest uppercase mb-6 text-gray-400">Diaphragmatic Breathing</h4>
+                        <p class="text-xl serif italic leading-relaxed text-gray-800">
+                            (Focus on your naval) Feel your naval movement, while expanding naval goes outward like a balloon and while exhaling feel navel is compressed to spine cord.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-10 bg-[#FDF0F3] mt-12">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i data-lucide="heart" class="w-8 h-8 text-pink-500"></i>
+                        <h4 class="text-3xl italic serif">Emotional Resilience</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6 font-light text-sm">
+                        Emotional resilience involves the capacity to recognise and manage your feelings as well as related behaviours, including the realistic assessment of your limitations and ability to cope effectively with stress.
+                    </p>
+                    <div class="bg-white p-6 rounded border border-pink-100">
+                        <input type="text" class="worksheet-input" placeholder="What could cause me to feel this way?">
+                        <input type="text" class="worksheet-input" placeholder="How can I experience more of this?">
+                    </div>
+                </div>
+
+                <div class="glass-card p-10 bg-[#FFF9F0]">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i data-lucide="activity" class="w-8 h-8 text-orange-500"></i>
+                        <h4 class="text-3xl italic serif">Physical Resilience</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6 font-light text-sm">
+                        Physical resilience focuses on the state of your physical body. It entails taking personal responsibility for and care of your body, understanding your body's warning signs and appreciating the relationship between exercise, nutrition as well as sleep.
+                    </p>
+                    <div class="bg-white p-6 rounded border border-orange-100">
+                        <input type="text" class="worksheet-input" placeholder="What self-care action can I take today?">
+                        <input type="text" class="worksheet-input" placeholder="How can I ensure I get more quality sleep?">
+                    </div>
+                </div>
+
+                <div class="glass-card p-10 bg-[#F0F7FF]">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i data-lucide="users" class="w-8 h-8 text-blue-500"></i>
+                        <h4 class="text-3xl italic serif">Social Resilience</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6 font-light text-sm">
+                        Social resilience refers to your capability to foster, engage in and sustain positive social relationships and to endure and recover from stressors that come with interacting with others.
+                    </p>
+                    <div class="bg-white p-6 rounded border border-blue-100">
+                        <input type="text" class="worksheet-input" placeholder="Person 1: What I appreciate about him/her...">
+                    </div>
+                </div>
+
+                <div class="glass-card p-10 bg-[#F2FBF5]">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i data-lucide="briefcase" class="w-8 h-8 text-green-600"></i>
+                        <h4 class="text-3xl italic serif">Career Resilience</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6 font-light text-sm">
+                        Career resilience refers to your ability to anticipate, adjust and adapt to career changes as they occur. Developing career resilience means taking charge of your own career trajectory and continuously developing new skills.
+                    </p>
+                    <div class="bg-white p-6 rounded border border-green-100">
+                        <input type="text" class="worksheet-input" placeholder="What are my career goals?">
+                    </div>
+                </div>
+
+                <div class="glass-card p-10 bg-[#FFFDF0]">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i data-lucide="coins" class="w-8 h-8 text-yellow-600"></i>
+                        <h4 class="text-3xl italic serif">Financial Resilience</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6 font-light text-sm">
+                        Financial resilience helps you build a firm foundation for your financial well-being. Having financial resilience means you have the ability to withstand life events that impact your income and/or assets.
+                    </p>
+                    <div class="bg-white p-6 rounded border border-yellow-100">
+                        <input type="text" class="worksheet-input" placeholder="What does money mean to me?">
+                    </div>
+                </div>
+            </section>
+
+            <section id="chunks" class="hidden-section space-y-8">
+                <div class="flex flex-col border-b border-black pb-4">
+                    <h3 class="text-4xl italic mb-2">Meditation Chunks</h3>
+                    <span class="text-2xl font-bold tracking-widest uppercase text-gray-500">5-10 Min Quick Reference</span>
+                </div>
+                <div class="grid md:grid-cols-2 gap-x-12 gap-y-2" id="chunks-list">
+                    </div>
+            </section>
+
+            <section id="timer" class="hidden-section">
+                <div class="flex flex-col items-center justify-center min-h-[70vh]">
+                    
+                    <div class="text-center mb-16">
+                        <h3 class="text-5xl italic serif mb-4">Mindful Moments</h3>
+                        <p class="text-gray-500 tracking-widest uppercase text-xs font-bold">Find your center and breathe</p>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center mb-16">
+                        <h2 id="time-display" class="text-8xl font-light text-black font-mono tracking-tighter">00:00</h2>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-4 mb-8">
+                        <button onclick="startTimer(15)" class="px-8 py-3 border border-black hover:bg-black hover:text-white transition rounded-full text-sm font-bold uppercase tracking-widest">15 Min</button>
+                        <button onclick="startTimer(30)" class="px-8 py-3 border border-black hover:bg-black hover:text-white transition rounded-full text-sm font-bold uppercase tracking-widest">30 Min</button>
+                        <button onclick="startTimer(45)" class="px-8 py-3 border border-black hover:bg-black hover:text-white transition rounded-full text-sm font-bold uppercase tracking-widest">45 Min</button>
+                    </div>
+
+                    <button onclick="stopTimer()" class="text-xs uppercase tracking-widest underline text-gray-400 hover:text-black transition">Reset / Stop</button>
+                    
+                </div>
+            </section>
+
+<!-- SESSIONS SECTION - FREE VERSION -->
+<section id="sessions" class="hidden-section space-y-8">
+    <div class="border-b border-black pb-4">
+        <h3 class="text-4xl italic serif">Sessions</h3>
+        <p class="text-xs font-bold tracking-widest uppercase text-gray-400 mt-2">Pre-recorded & Live</p>
+    </div>
+
+    <!-- Tab Toggle -->
+    <div class="flex border-b border-gray-200">
+        <button onclick="switchSessionTab('prerecorded', this)" id="tab-prerecorded"
+            class="session-tab px-6 py-3 text-[10px] font-bold tracking-widest uppercase border-b-2 border-black text-black transition">
+            Pre-recorded
+        </button>
+        <button onclick="switchSessionTab('live', this)" id="tab-live"
+            class="session-tab px-6 py-3 text-[10px] font-bold tracking-widest uppercase border-b-2 border-transparent text-gray-400 transition">
+            Live Sessions 🔒
+        </button>
+    </div>
+
+    <!-- PRE-RECORDED TAB -->
+    <div id="tab-content-prerecorded">
+        <p class="text-xs text-gray-400 font-bold tracking-widest uppercase mb-6">3 of 6 sessions available on Free plan</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- FREE SESSION 1 -->
+            <div class="glass-card overflow-hidden group cursor-pointer">
+                <div class="bg-black aspect-video flex items-center justify-center relative">
+                    <div class="w-14 h-14 rounded-full border-2 border-white flex items-center justify-center group-hover:scale-110 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <div class="absolute bottom-3 right-3 bg-white/20 text-white text-[10px] font-bold px-2 py-1 rounded">12:34</div>
+                </div>
+                <div class="p-5">
+                    <span class="text-[9px] font-bold tracking-widest uppercase text-gray-400">Breathwork · Foundation</span>
+                    <h4 class="serif italic text-xl mt-1 mb-2">Diaphragmatic Breathing</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Master the foundation of all vibrational healing. The breath that changes everything.</p>
+                </div>
+            </div>
+
+            <!-- FREE SESSION 2 -->
+            <div class="glass-card overflow-hidden group cursor-pointer">
+                <div class="bg-black aspect-video flex items-center justify-center relative">
+                    <div class="w-14 h-14 rounded-full border-2 border-white flex items-center justify-center group-hover:scale-110 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <div class="absolute bottom-3 right-3 bg-white/20 text-white text-[10px] font-bold px-2 py-1 rounded">08:15</div>
+                </div>
+                <div class="p-5">
+                    <span class="text-[9px] font-bold tracking-widest uppercase text-gray-400">Calm · Stress Relief</span>
+                    <h4 class="serif italic text-xl mt-1 mb-2">Calm Down Protocol</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Instant stress relief using the 4-7-8 breathing technique and OM anchoring.</p>
+                </div>
+            </div>
+
+            <!-- FREE SESSION 3 -->
+            <div class="glass-card overflow-hidden group cursor-pointer">
+                <div class="bg-black aspect-video flex items-center justify-center relative">
+                    <div class="w-14 h-14 rounded-full border-2 border-white flex items-center justify-center group-hover:scale-110 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <div class="absolute bottom-3 right-3 bg-white/20 text-white text-[10px] font-bold px-2 py-1 rounded">10:00</div>
+                </div>
+                <div class="p-5">
+                    <span class="text-[9px] font-bold tracking-widest uppercase text-gray-400">Focus · Mental Clarity</span>
+                    <h4 class="serif italic text-xl mt-1 mb-2">Increase Focus</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Kapalabhati + OM anchoring to train gamma brainwaves for laser-sharp concentration.</p>
+                </div>
+            </div>
+
+            <!-- LOCKED SESSION 4 -->
+            <div class="glass-card overflow-hidden opacity-60 relative">
+                <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/80 cursor-pointer" onclick="window.location.href='upgrade.html'">
+                    <div class="text-2xl mb-2">🔒</div>
+                    <p class="text-[10px] font-bold tracking-widest uppercase text-gray-700 mb-1">Pro Only</p>
+                    <span onclick="window.location.href='upgrade.html'" class="text-[9px] font-bold tracking-widest uppercase underline cursor-pointer text-gray-500">Upgrade to unlock</span>
+                </div>
+                <div class="bg-gray-200 aspect-video"></div>
+                <div class="p-5">
+                    <span class="text-[9px] font-bold tracking-widest uppercase text-gray-300">OM Resonance · Pro</span>
+                    <h4 class="serif italic text-xl mt-1 mb-2 text-gray-400">OM Healing Meditation</h4>
+                    <p class="text-xs text-gray-300 leading-relaxed">Deep 136.1 Hz OM resonance session for full-body vibrational healing.</p>
+                </div>
+            </div>
+
+            <!-- LOCKED SESSION 5 -->
+            <div class="glass-card overflow-hidden opacity-60 relative">
+                <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/80 cursor-pointer" onclick="window.location.href='upgrade.html'">
+                    <div class="text-2xl mb-2">🔒</div>
+                    <p class="text-[10px] font-bold tracking-widest uppercase text-gray-700 mb-1">Pro Only</p>
+                    <span onclick="window.location.href='upgrade.html'" class="text-[9px] font-bold tracking-widest uppercase underline cursor-pointer text-gray-500">Upgrade to unlock</span>
+                </div>
+                <div class="bg-gray-200 aspect-video"></div>
+                <div class="p-5">
+                    <span class="text-[9px] font-bold tracking-widest uppercase text-gray-300">Chakras · Energy · Pro</span>
+                    <h4 class="serif italic text-xl mt-1 mb-2 text-gray-400">Chakra Alignment</h4>
+                    <p class="text-xs text-gray-300 leading-relaxed">Complete 7-chakra healing sequence using targeted OM frequency work.</p>
+                </div>
+            </div>
+
+            <!-- LOCKED SESSION 6 -->
+            <div class="glass-card overflow-hidden opacity-60 relative">
+                <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/80 cursor-pointer" onclick="window.location.href='upgrade.html'">
+                    <div class="text-2xl mb-2">🔒</div>
+                    <p class="text-[10px] font-bold tracking-widest uppercase text-gray-700 mb-1">Pro Only</p>
+                    <span onclick="window.location.href='upgrade.html'" class="text-[9px] font-bold tracking-widest uppercase underline cursor-pointer text-gray-500">Upgrade to unlock</span>
+                </div>
+                <div class="bg-gray-200 aspect-video"></div>
+                <div class="p-5">
+                    <span class="text-[9px] font-bold tracking-widest uppercase text-gray-300">Nervous System · Pro</span>
+                    <h4 class="serif italic text-xl mt-1 mb-2 text-gray-400">Vagus Nerve Activation</h4>
+                    <p class="text-xs text-gray-300 leading-relaxed">The master switch for total health — activate your parasympathetic healing mode.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE SESSIONS TAB - LOCKED FOR FREE -->
+    <div id="tab-content-live" style="display:none">
+        <div class="border border-dashed border-gray-300 p-16 text-center">
+            <div class="text-4xl mb-4">🔒</div>
+            <h4 class="serif italic text-3xl mb-3">Live Sessions are Pro Only</h4>
+            <p class="text-sm text-gray-500 max-w-md mx-auto mb-8 leading-relaxed">
+                Join daily live OM circles, breathwork masterclasses and vagus nerve resets with the AVM Academy team. Available on Professional and Executive plans.
+            </p>
+            <button onclick="window.location.href='upgrade.html'" class="btn-upgrade">Upgrade to Access Live Sessions</button>
+        </div>
+    </div>
+</section>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // UI Navigation Fix
+        function showSection(sectionId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden-section'));
+            document.getElementById(sectionId).classList.remove('hidden-section');
+            
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active', 'text-black'));
+            document.getElementById('link-' + sectionId).classList.add('active', 'text-black');
+            
+            const titles = { sessions: "Sessions", dashboard: "Command Hub", calendar: "My Schedule", kit: "Wellness Kit", chunks: "Meditation Chunks", timer: "Meditation Timer" };
+            document.getElementById('page-title').innerText = titles[sectionId];
+        }
+
+        // --- CALENDAR LOGIC ---
+        let currentMonth = 2; // March 2026
+        const year = 2026;
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        function renderCalendar() {
+            const body = document.getElementById('calendar-body');
+            const title = document.getElementById('calendar-month-year');
+            body.innerHTML = '';
+            title.innerText = `${monthNames[currentMonth]} ${year}`;
+
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(d => body.innerHTML += `<div class="weekday">${d}</div>`);
+
+            const firstDay = new Date(year, currentMonth, 1).getDay();
+            const daysInMonth = new Date(year, currentMonth + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                body.innerHTML += `<div class="calendar-day other-month"></div>`;
+            }
+            for (let i = 1; i <= daysInMonth; i++) {
+                body.innerHTML += `<div class="calendar-day" onclick="this.classList.toggle('available')">${i}</div>`;
+            }
+        }
+
+        function changeMonth(dir) {
+            const newMonth = currentMonth + dir;
+            if (newMonth >= 2 && newMonth <= 11) { 
+                currentMonth = newMonth;
+                renderCalendar();
+            }
+        }
+
+        function submitAvailability() {
+            const selected = document.querySelectorAll('.calendar-day.available');
+            if(selected.length === 0) {
+                alert("Please select at least one date on the calendar first.");
+            } else {
+                alert(`Success! You have submitted ${selected.length} available dates to the system.`);
+                selected.forEach(el => el.classList.remove('available'));
+            }
+        }
+
+        // --- MEDITATION CHUNKS (CLEANED) ---
+        const chunkTitles = [
+            "Calm down", "Increase focus", "Physical ailment", "Mental Sickness",
+            "Diaphragmatic breathing", "Increase oxygen level of your body",
+            "Healing of chakras", "Emotional liberation", "Increase digestion",
+            "Third eye activation", "Skull exercise", "Overall healing of the body",
+            "Brain exercise", "Vagus Nerve activation", "Spinal cord activation",
+            "Activation of parasymphatetic nervous system"
+        ];
+        
+        const list = document.getElementById('chunks-list');
+        chunkTitles.forEach((c, i) => {
+            list.innerHTML += `
+                <div class="border-b border-gray-100 py-4 flex items-center gap-4 hover:bg-gray-50 cursor-pointer transition px-2">
+                    <span class="text-[10px] font-bold text-gray-300">${(i+1).toString().padStart(2, '0')}</span> 
+                    <span class="font-medium text-lg">${c}</span>
+                </div>`;
+        });
+
+        // --- MEDITATION TIMER LOGIC (CLEAN VERSION) ---
+        let timerInterval;
+        let timeRemaining = 0;
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemaining / 60);
+            const secs = timeRemaining % 60;
+            document.getElementById('time-display').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer(minutes) {
+            clearInterval(timerInterval);
+            timeRemaining = minutes * 60;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    stopTimer();
+                    alert("Session complete. Namaste.");
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timeRemaining = 0;
+            updateTimerDisplay();
+        }
+
+        // Init
+        renderCalendar();
+    
+
+        // ══════════════════════════════════════
+        // AVM ACADEMY · AUTH + BACKEND (FREE)
+        // ══════════════════════════════════════
+        const API = '/api';
+
+        function getToken() { return localStorage.getItem('avm_token'); }
+        function getUser()  { return JSON.parse(localStorage.getItem('avm_user') || 'null'); }
+
+        function authHeaders() {
+            return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() };
+        }
+
+        // ── BOOT ──────────────────────────────
+        (function boot() {
+            const user = getUser();
+            if (!user) { window.location.href = 'index.html'; return; }
+            // Greet user
+            const greet = document.getElementById('user-greeting');
+            if (greet) greet.textContent = 'Hello, ' + user.name.split(' ')[0];
+            // Lock Pro features visually
+            lockProFeatures();
+            // Load saved data
+            loadKitFromServer();
+            loadCalendarFromServer();
+        })();
+
+        function lockProFeatures() {
+            // Lock timer buttons > 15 min
+            document.querySelectorAll('button').forEach(btn => {
+                const txt = btn.textContent.trim();
+                if (['30 Min','45 Min'].includes(txt)) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.4';
+                    btn.style.cursor = 'not-allowed';
+                    btn.title = 'Pro feature — upgrade to unlock';
+                    btn.textContent = btn.textContent + ' ✦';
+                    btn.onclick = (e) => { e.stopPropagation(); window.location.href='upgrade.html'; };
+                }
+            });
+        }
+
+        function upgradeToPro() {
+            window.location.href = 'upgrade.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('avm_token');
+            localStorage.removeItem('avm_user');
+            window.location.href = 'index.html';
+        }
+
+        // ── KIT SAVE (with backend) ──────────────
+        async function saveKitToServer(pillar, inputs) {
+            try {
+                await fetch(API + '/kit', {
+                    method: 'POST', headers: authHeaders(),
+                    body: JSON.stringify({ pillar, inputs })
+                });
+            } catch(e) { console.warn('Kit save failed', e); }
+        }
+
+        async function loadKitFromServer() {
+            try {
+                const res = await fetch(API + '/kit', { headers: authHeaders() });
+                const kits = await res.json();
+                kits.forEach(k => {
+                    document.querySelectorAll('.glass-card').forEach(card => {
+                        const h4 = card.querySelector('h4');
+                        if (h4 && h4.textContent.includes(k.pillar.split(' ')[0])) {
+                            const inputs = card.querySelectorAll('.worksheet-input');
+                            k.inputs.forEach((val, i) => { if (inputs[i]) inputs[i].value = val; });
+                        }
+                    });
+                });
+            } catch(e) { console.warn('Kit load failed', e); }
+        }
+
+        // Override the kit save buttons
+        document.querySelectorAll('.glass-card').forEach(card => {
+            const h4 = card.querySelector('h4');
+            if (!h4) return;
+            const btn = document.createElement('button');
+            btn.textContent = 'Save Reflection';
+            btn.style.cssText = 'margin-top:10px;padding:8px 20px;border:1px solid #1A1A1A;background:transparent;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:0.2s';
+            btn.onmouseover = () => { btn.style.background='#1A1A1A'; btn.style.color='white'; };
+            btn.onmouseout  = () => { btn.style.background='transparent'; btn.style.color='#1A1A1A'; };
+            btn.onclick = async () => {
+                const inputs = [...card.querySelectorAll('.worksheet-input')].map(i => i.value);
+                await saveKitToServer(h4.textContent.trim(), inputs);
+                btn.textContent = 'Saved ✓';
+                setTimeout(() => btn.textContent = 'Save Reflection', 2000);
+            };
+            const inputArea = card.querySelector('.bg-white');
+            if (inputArea) inputArea.appendChild(btn);
+        });
+
+        // ── CALENDAR (backend) ──────────────────
+        async function loadCalendarFromServer() {
+            try {
+                const res = await fetch(API + '/calendar', { headers: authHeaders() });
+                const data = await res.json();
+                if (data.dates && data.dates.length) {
+                    // Mark saved dates visually — note current calendar uses class toggle
+                    console.log('Loaded', data.dates.length, 'saved dates');
+                }
+            } catch(e) { console.warn('Calendar load failed', e); }
+        }
+
+        // Override submitAvailability
+        const _origSubmit = window.submitAvailability;
+        window.submitAvailability = async function() {
+            const selected = document.querySelectorAll('.calendar-day.available');
+            if (selected.length === 0) { alert('Please select at least one date.'); return; }
+            const dates = [...selected].map(el => {
+                const day = el.textContent.trim();
+                return new Date(2026, currentMonth, parseInt(day)).toISOString().split('T')[0];
+            });
+            try {
+                await fetch(API + '/calendar', {
+                    method: 'POST', headers: authHeaders(),
+                    body: JSON.stringify({ dates })
+                });
+                alert('✓ ' + selected.length + ' dates submitted to the Academy!');
+                selected.forEach(el => el.classList.remove('available'));
+            } catch(e) { alert('Submitted locally (server offline).'); }
+        };
+
+        // ── SESSION LOG ─────────────────────────
+        const _origStartTimer = window.startTimer;
+        window.startTimer = function(minutes) {
+            _origStartTimer(minutes);
+            // Log on completion tracked via interval
+            const checkDone = setInterval(() => {
+                if (timeRemaining <= 0 && !timerInterval) {
+                    clearInterval(checkDone);
+                    fetch(API + '/sessions/log', {
+                        method: 'POST', headers: authHeaders(),
+                        body: JSON.stringify({ type: 'meditation', minutes })
+                    }).catch(() => {});
+                }
+            }, 2000);
+        };
+
+
+        // Session tab switching
+        function switchSessionTab(tab, btn) {
+            document.querySelectorAll('.session-tab').forEach(b => {
+                b.classList.remove('border-black', 'text-black');
+                b.classList.add('border-transparent', 'text-gray-400');
+            });
+            btn.classList.add('border-black', 'text-black');
+            btn.classList.remove('border-transparent', 'text-gray-400');
+            document.getElementById('tab-content-prerecorded').style.display = tab === 'prerecorded' ? 'block' : 'none';
+            document.getElementById('tab-content-live').style.display = tab === 'live' ? 'block' : 'none';
+        }
+
+    </script>
+    </div>
+</body>
+</html>
